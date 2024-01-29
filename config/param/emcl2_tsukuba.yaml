@@ -1,0 +1,22 @@
+odom_freq                     : 100
+num_particles                 : 10000
+odom_frame_id                 : odom
+footprint_frame_id            : base_footprint
+base_frame_id                 : base_link
+odom_fw_dev_per_fw            : 0.1
+odom_fw_dev_per_rot           : 0.2
+odom_rot_dev_per_fw           : 0.13
+odom_rot_dev_per_rot          : 0.05
+laser_likelihood_max_dist     : 1.0
+alpha_threshold               : 0.0
+open_space_threshold          : 0.05
+expansion_radius_position     : 0.1
+expansion_radius_orientation  : 0.2
+range_threshold               : 0.3
+laser_min_range               : 0.0
+laser_max_range               : 30.0
+scan_increment                : 1
+
+handle_unknown_obstacles      : true #未知障害物対策機能を使用するか
+observation_range             : 20   #観測範囲[deg]
+sampling_rate                 : 0.1  #リサンプリング時に観測範囲を再付与する割合（全体のパーティクルの内）

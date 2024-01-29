@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Arguments -->
+  <arg name="handle_unknown_obstacles"  default="true"/>
+  <arg name="observation_range"         default="30"/>
+
+  <arg name="world_name"          default="tsudanuma" doc="world_name type [tsudanuma, tsukuba]"/>
+  <arg name="unknown_obstacle"    default="true"/>
+
+  <arg name="open_rviz"           default="true"/>
+  <arg name="open_gazebo"         default="true"/>
+
+  <arg name="mcl_map_file"        default="$(find raspicat_waypoint_navigation)/config/maps/$(arg world_name)/map_$(arg world_name).yaml"/>
+  <arg name="move_base_map_file"  default="$(find raspicat_waypoint_navigation)/config/maps/for_move_base/map_$(arg world_name).yaml"/>
+  <arg name="cmd_vel_out"         default="/cmd_vel"/>
+  <arg name="config_topics"       default="$(find raspicat_waypoint_navigation)/config/param/twist_mux_topics.yaml"/>
+
+  <!-- Tsudanuma -->
+  <group if="$(eval world_name=='tsudanuma')">
+    <arg name="x_gazebo"    default="26.0"/>
+    <arg name="y_gazebo"    default="15.0"/>
+    <arg name="yaw_gazebo"  default="-1.57"/>
+
+    <arg name="x_mcl"       default="25.9"/>
+    <arg name="y_mcl"       default="17.2"/>
+    <arg name="a_mcl"       default="-1.57"/>
+
+    <!-- Gazebo -->
+    <include file="$(find mcl_unkown_obstacle_experiment)/launch/$(arg world_name)_world.launch">
+      <arg name="x_init_pos"            value="$(arg x_gazebo)"/>
+      <arg name="y_init_pos"            value="$(arg y_gazebo)"/>
+      <arg name="yaw_init_pos"          value="$(arg yaw_gazebo)"/>
+      <arg name="open_gui"              value="$(arg open_gazebo)"/>
+      <arg name="unknown_obstacle"      value="$(arg unknown_obstacle)"/>
+    </include>
+    
+    <!-- Emcl2 -->
+    <node pkg="emcl2" type="emcl2_node" name="emcl2_node" output="screen">
+      <rosparam command="load" file="$(find mcl_unkown_obstacle_experiment)/config/param/emcl2_tsudanuma.yaml"/>
+      <param name="initial_pose_x"  value="$(arg x_mcl)"/>
+      <param name="initial_pose_y"  value="$(arg y_mcl)"/>
+      <param name="initial_pose_a"  value="$(arg a_mcl)"/>
+      <param name="handle_unknown_obstacles"    value="$(arg handle_unknown_obstacles)"/>
+      <param name="observation_range"           value="$(arg observation_range)"/>
+    </node>
+  </group>
+
+  <!-- Tsukuba -->
+  <group if="$(eval world_name=='tsukuba')">
+    <arg name="x_gazebo"    default="0.0"/>
+    <arg name="y_gazebo"    default="0.0"/>
+    <arg name="yaw_gazebo"  default="0.0"/>
+
+    <arg name="x_mcl"       default="0.88"/>
+    <arg name="y_mcl"       default="0.28"/>
+    <arg name="a_mcl"       default="-0.039"/>
+
+    <!-- Gazebo -->
+    <include file="$(find mcl_unkown_obstacle_experiment)/launch/$(arg world_name)_world.launch">
+      <arg name="x_init_pos"            value="$(arg x_gazebo)"/>
+      <arg name="y_init_pos"            value="$(arg y_gazebo)"/>
+      <arg name="yaw_init_pos"          value="$(arg yaw_gazebo)"/>
+      <arg name="open_gui"              value="$(arg open_gazebo)"/>
+      <arg name="unknown_obstacle"      value="$(arg unknown_obstacle)"/>
+    </include>
+
+    <!-- Emcl2 -->
+    <node pkg="emcl2" type="emcl2_node" name="emcl2_node" output="screen">
+      <rosparam command="load" file="$(find mcl_unkown_obstacle_experiment)/config/param/emcl2_tsukuba.yaml"/>
+      <param name="initial_pose_x"  value="$(arg x_mcl)"/>
+      <param name="initial_pose_y"  value="$(arg y_mcl)"/>
+      <param name="initial_pose_a"  value="$(arg a_mcl)"/>
+      <param name="handle_unknown_obstacles"    value="$(arg handle_unknown_obstacles)"/>
+      <param name="observation_range"           value="$(arg observation_range)"/>
+    </node>
+  </group>
+
+  <!-- Map_server -->
+  <node pkg="map_server" name="mcl_map_server" type="map_server" args="$(arg mcl_map_file)"/>
+
+  <node pkg="map_server" name="move_base_map_server" type="map_server" args="$(arg move_base_map_file)">
+    <remap from="map"           to="/move_base_map"/>
+    <remap from="static_map"    to="/move_base_static_map"/>
+  </node>
+
+  <!-- Move_base -->
+  <include file="$(find raspicat_waypoint_navigation)/launch/move_base.launch">
+    <arg name="move_forward_only"   value="false"/>
+    <arg name="waypoint_nav"        default="true"/>
+  </include>
+
+  <!-- Twist mux -->
+  <node pkg="twist_mux" type="twist_mux" name="twist_mux" output="screen">
+    <remap from="cmd_vel_out"               to="$(arg cmd_vel_out)"/>
+    <rosparam file="$(arg config_topics)"   command="load"/>
+  </node>
+
+  <!-- RViz -->
+  <group if="$(arg open_rviz)">
+    <node if="$(eval world_name=='tsudanuma')" pkg="rviz" type="rviz" name="rviz" required="true"
+        args="-d $(find mcl_unkown_obstacle_experiment)/config/rviz/tsudanuma.rviz">
+    </node>
+    <node if="$(eval world_name=='tsukuba')" pkg="rviz" type="rviz" name="rviz" required="true"
+        args="-d $(find mcl_unkown_obstacle_experiment)/config/rviz/tsukuba.rviz">
+    </node>
+  </group>
+
+  <node if="$(eval world_name=='tsudanuma')" name="publish_goal_node" pkg="mcl_unkown_obstacle_experiment" type="publish_goal_tsudanuma.sh" output="screen"/>
+
+  <node if="$(eval world_name=='tsukuba')" name="publish_goal_node" pkg="mcl_unkown_obstacle_experiment" type="publish_goal_tsukuba.sh" output="screen"/>
+</launch>

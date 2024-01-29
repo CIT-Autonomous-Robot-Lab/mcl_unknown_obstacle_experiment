@@ -9,9 +9,12 @@
   <license>Apache-2.0 License</license>
 
   <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>emcl2</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>raspicat_gazebo</exec_depend>
   <exec_depend>raspicat_description</exec_depend>
+  <exec_depend>raspicat_waypoint_navigation</exec_depend>
+  <exec_depend>raspicat_waypoint_navigation</exec_depend>
 
   <export>
     <gazebo_ros gazebo_media_path="${prefix}/config/world"/>
