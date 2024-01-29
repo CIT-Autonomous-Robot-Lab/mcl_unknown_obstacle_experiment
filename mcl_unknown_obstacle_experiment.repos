@@ -1,0 +1,9 @@
+repositories: 
+  raspicat:
+    type: git
+    url: https://github.com/CIT-Autonomous-Robot-Lab/raspicat.git
+    version: master
+  emcl2:
+    type: git
+    url: https://github.com/CIT-Autonomous-Robot-Lab/emcl2.git
+    version: feat/observation-range
