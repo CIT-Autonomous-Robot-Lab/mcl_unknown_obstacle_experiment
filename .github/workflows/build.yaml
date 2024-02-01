@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/LICENSE'
+      - '**/*.md'
+  pull_request:
+    paths-ignore:
+      - '**/LICENSE'
+      - '**/*.md'
+
+env:
+  DOCKER-CONTEXT: ./
+  DOCKER-FILE: ./.github/Dockerfile
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker image tag
+      run: echo "DOCKER_IMAGE_TAG=ghcr.io/$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')/mcl_unknown_obstacle_experiment:melodic" >> $GITHUB_ENV
+
+    - name: Build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: ${{ env.DOCKER-CONTEXT }}
+        file: ${{ env.DOCKER-FILE }}
+        tags: ${{ env.DOCKER_IMAGE_TAG }}
+        build-args: USERNAME=runner
+        no-cache: false
+        push: false
+
