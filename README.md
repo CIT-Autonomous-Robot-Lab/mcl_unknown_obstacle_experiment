@@ -24,7 +24,7 @@ docker run --rm -it \
 
 | option                   | description                           | type   | default   |
 | ------------------------ | ------------------------------------- | ------ | --------- |
-| world_name               | シミュレータ環境の選択                | string | tsudanuma |
+| world_name               | シミュレータ環境の名前                | string | tsudanuma |
 | unknown_obstacle         | 未知障害物を配置するか                | bool   | true      |
 | handle_unknown_obstacles | 未知障害物対策有りのemcl2を実行するか | bool   | true      |
 | observation_range        | 観測範囲[deg]                         | int    | 30        |
