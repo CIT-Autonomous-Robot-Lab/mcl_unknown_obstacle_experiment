@@ -1,0 +1,21 @@
+repositories: 
+  mcl_unknown_obstacle_experiment:
+    type: git
+    url: https://github.com/CIT-Autonomous-Robot-Lab/mcl_unknown_obstacle_experiment.git
+    version: main
+  raspicat:
+    type: git
+    url: https://github.com/CIT-Autonomous-Robot-Lab/raspicat.git
+    version: 2df9f1e
+  emcl2:
+    type: git
+    url: https://github.com/CIT-Autonomous-Robot-Lab/emcl2.git
+    version: feat/observation-range
+  lightsfm:
+    type: git
+    url: https://github.com/CIT-Autonomous-Robot-Lab/lightsfm.git
+    version: 1f9c178
+  turtlebot3_simulations_jp_custom:
+    type: git
+    url: https://github.com/CIT-Autonomous-Robot-Lab/turtlebot3_simulations_jp_custom.git
+    version: e23a875
