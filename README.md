@@ -5,6 +5,8 @@
 
 # Install
 
+* GPUなしの場合
+
 ```
 docker run --rm -it \
            -u $(id -u):$(id -g) \
@@ -18,6 +20,33 @@ docker run --rm -it \
            --name mcl-unknown-obstacle-experiment \
            ghcr.io/cit-autonomous-robot-lab/mcl_unknown_obstacle_experiment:melodic
 ```
+
+`gazebo`コマンドの起動後に以下のようなエラーが出る場合は**GPUありの場合**の`docker run`をするとうまく行くかもしれません
+```
+libGL error: No matching fbConfigs or visuals found
+libGL error: failed to load driver: swrast
+Error: couldn't get an RGB, Double-buffered visual
+```
+
+* GPUありの場合
+
+```
+docker run --rm -it \
+           -e NVIDIA_VISIBLE_DEVICES=all \
+           -e NVIDIA_DRIVER_CAPABILITIES=all \
+           --gpus all \
+           -u $(id -u):$(id -g) \
+           --privileged \
+           --net=host \
+           --ipc=host \
+           --env="DISPLAY=$DISPLAY" \
+           --mount type=bind,source=/home/$USER/.ssh,target=/home/$USER/.ssh \
+           --mount type=bind,source=/home/$USER/.gitconfig,target=/home/$USER/.gitconfig \
+           --mount type=bind,source=/usr/share/zoneinfo/Asia/Tokyo,target=/etc/localtime \
+           --name mcl-unknown-obstacle-experiment \
+           ghcr.io/cit-autonomous-robot-lab/mcl_unknown_obstacle_experiment:melodic
+```
+
 # Launch file Description
 
 * mcl_experiment.launch
