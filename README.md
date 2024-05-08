@@ -21,7 +21,7 @@ docker run --rm -it \
            ghcr.io/cit-autonomous-robot-lab/mcl_unknown_obstacle_experiment:melodic
 ```
 
-`gazebo`コマンドの起動後に以下のようなエラーが出る場合はGPUありの場合の`docker run`をするとうまく行くかもしれません
+`gazebo`コマンドの起動後に以下のようなエラーが出る場合は**GPUありの場合**の`docker run`をするとうまく行くかもしれません
 ```
 libGL error: No matching fbConfigs or visuals found
 libGL error: failed to load driver: swrast
